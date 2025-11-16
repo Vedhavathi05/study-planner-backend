@@ -12,7 +12,7 @@ const { User, Subject, StudySession, Flashcard, Resource } = require("./tables.j
 const app = express();
 app.use(express.json());
 
-// UPDATED CORS (IMPORTANT)
+
 app.use(
   cors({
     origin: [
