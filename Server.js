@@ -1,4 +1,3 @@
-
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -13,18 +12,22 @@ const { User, Subject, StudySession, Flashcard, Resource } = require("./tables.j
 const app = express();
 app.use(express.json());
 
+// UPDATED CORS (IMPORTANT)
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://gentle-babka-fea890.netlify.app"
+    ],
     credentials: true,
   })
 );
 
+// AUTH MIDDLEWARE
 function auth(req, res, next) {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) return res.status(401).json({ message: "No token provided" });
-
 
     const parts = authHeader.split(" ");
     if (parts.length !== 2 || parts[0] !== "Bearer")
@@ -32,7 +35,7 @@ function auth(req, res, next) {
 
     const token = parts[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; 
+    req.user = decoded;
     next();
   } catch (err) {
     console.error("Auth middleware error:", err.message);
@@ -44,6 +47,7 @@ app.get("/", (req, res) => {
   res.send("Backend running successfully");
 });
 
+// REGISTER
 app.post("/api/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -77,6 +81,7 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
+// LOGIN
 app.post("/api/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -113,6 +118,7 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+// SUBJECTS
 app.post("/api/subjects", auth, async (req, res) => {
   try {
     const subject = await Subject.create({
@@ -136,6 +142,7 @@ app.get("/api/subjects", auth, async (req, res) => {
   }
 });
 
+// STUDY SESSIONS
 app.post("/api/session", auth, async (req, res) => {
   try {
     const session = await StudySession.create({
@@ -162,7 +169,7 @@ app.get("/api/session", auth, async (req, res) => {
   }
 });
 
-
+// FLASHCARDS
 app.post("/api/flashcards", auth, async (req, res) => {
   try {
     const card = await Flashcard.create({
@@ -178,7 +185,6 @@ app.post("/api/flashcards", auth, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 app.get("/api/flashcards/:subjectId", auth, async (req, res) => {
   try {
@@ -224,6 +230,8 @@ app.delete("/api/flashcards/:id", auth, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// RESOURCES
 app.post("/api/resources", auth, async (req, res) => {
   try {
     const resource = await Resource.create({
@@ -243,7 +251,7 @@ app.post("/api/resources", auth, async (req, res) => {
 app.get("/api/resources/:subjectId", auth, async (req, res) => {
   try {
     const resources = await Resource.find({
-      userId: req.user.userId,
+      userId: req.user.user.userId,
       subjectId: req.params.subjectId,
     });
 
@@ -283,9 +291,9 @@ app.delete("/api/resources/:id", auth, async (req, res) => {
   }
 });
 
+// MONGO + SERVER
 mongoose
   .connect(process.env.MONGO_URI, {
-
     serverSelectionTimeoutMS: 5000,
   })
   .then(() => console.log("MongoDB Connected Successfully"))
