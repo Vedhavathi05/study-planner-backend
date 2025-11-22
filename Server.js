@@ -12,7 +12,11 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: [
+      "http://localhost:5173",
+      "https://startling-queijadas-a48bd5.netlify.app" 
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true,
   })
 );
