@@ -1,4 +1,4 @@
-// backend/middleware/authMiddleware.js
+
 const jwt = require("jsonwebtoken");
 
 function auth(req, res, next) {
@@ -11,7 +11,6 @@ function auth(req, res, next) {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // decoded = { _id, email }
     req.user = decoded;
     next();
   } catch (err) {

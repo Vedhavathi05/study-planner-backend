@@ -1,7 +1,6 @@
 
 const Flashcard = require("../models/Flashcard"); 
 
-// CREATE flashcard  -> POST /api/flashcards
 exports.createFlashcard = async (req, res) => {
   try {
     const flashcard = await Flashcard.create({
@@ -17,7 +16,6 @@ exports.createFlashcard = async (req, res) => {
   }
 };
 
-// GET flashcards by subject -> GET /api/flashcards/:subjectId
 exports.getFlashcards = async (req, res) => {
   try {
     const cards = await Flashcard.find({
@@ -31,7 +29,6 @@ exports.getFlashcards = async (req, res) => {
   }
 };
 
-// UPDATE flashcard -> PUT /api/flashcards/:id
 exports.updateFlashcard = async (req, res) => {
   try {
     const { id } = req.params;
@@ -53,7 +50,6 @@ exports.updateFlashcard = async (req, res) => {
   }
 };
 
-// DELETE flashcard -> DELETE /api/flashcards/:id
 exports.deleteFlashcard = async (req, res) => {
   try {
     const card = await Flashcard.findOneAndDelete({

@@ -1,4 +1,4 @@
-// backend/controllers/sessionController.js
+
 const StudySession = require("../models/StudySession");
 
 exports.createSession = async (req, res) => {

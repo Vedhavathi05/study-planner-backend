@@ -1,7 +1,6 @@
-// backend/controllers/subjectController.js
-const Subject = require("../models/Subject"); // or "../models/subjectModel" if that's your file name
 
-// POST /api/subjects
+const Subject = require("../models/Subject"); 
+
 exports.createSubject = async (req, res) => {
   try {
     const subject = await Subject.create({
@@ -14,7 +13,6 @@ exports.createSubject = async (req, res) => {
   }
 };
 
-// GET /api/subjects
 exports.getSubjects = async (req, res) => {
   try {
     const subjects = await Subject.find({ userId: req.user._id });
@@ -24,7 +22,6 @@ exports.getSubjects = async (req, res) => {
   }
 };
 
-// DELETE /api/subjects/:id
 exports.deleteSubject = async (req, res) => {
   try {
     const subject = await Subject.findOneAndDelete({

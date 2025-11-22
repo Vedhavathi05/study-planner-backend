@@ -1,5 +1,5 @@
-// backend/controllers/resourceController.js
-const Resource = require("../models/Resource"); // or "../models/resourceModel"
+
+const Resource = require("../models/Resource"); 
 
 exports.createResource = async (req, res) => {
   try {
